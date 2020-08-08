@@ -78,6 +78,9 @@ export default {
           autoGainControl: false,
           echoCancellation: false,
           noiseSuppression: false,
+          channelCount: 2,
+          sampleRate: 48000,
+          sampleSize: 16,
         };
       }
 

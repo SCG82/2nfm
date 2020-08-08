@@ -84,6 +84,7 @@ export default {
         connection.session = {
           audio: false,
           video: false,
+          stereo: this.params.forceStereo,
           data: true,
           oneway: true,
         };
@@ -124,6 +125,7 @@ export default {
       this.connection.session = {
         audio: true,
         video: true,
+        stereo: this.params.forceStereo,
         data: true,
         oneway: true,
       };
@@ -137,6 +139,7 @@ export default {
       this.connection.processSdp = (sdp) => {
         var bandwidth = this.params.bandwidth;
         var codecs = this.params.codecs;
+        var forceStereo = this.params.forceStereo;
 
         if (bandwidth) {
           try {
@@ -157,6 +160,15 @@ export default {
               max: bandwidth,
             });
           }
+        }
+
+        if (forceStereo) {
+          sdp = CodecsHandler.setOpusAttributes(sdp, {
+            stereo: true,
+            'sprop-stereo': true,
+            maxaveragebitrate: 128 * 1000,
+            cbr: true,
+          });
         }
 
         if (!!codecs && codecs !== 'default') {

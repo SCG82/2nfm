@@ -37,6 +37,10 @@ export default {
       type: Boolean,
       default: false, 
     },
+    forceStereo: {
+      type: Boolean,
+      default: false,
+    },
     isP2POnly: {
       type: Boolean,
       default: false,
@@ -82,6 +86,7 @@ export default {
       this.connection.session = {
         audio: this.enableAudio,
         video: this.enableVideo,
+        stereo: this.forceStereo,
         data: true,
         oneway: true,
       };
@@ -134,6 +139,15 @@ export default {
           sdp = CodecsHandler.preferCodec(sdp, Codecs.h264);
         } else {
           sdp = CodecsHandler.preferCodec(sdp, this.codecs);
+        }
+
+        if (this.forceStereo) {
+          sdp = CodecsHandler.setOpusAttributes(sdp, {
+            stereo: true,
+            'sprop-stereo': true,
+            maxaveragebitrate: 128 * 1000,
+            cbr: true,
+          });
         }
           
         return sdp;

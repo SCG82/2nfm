@@ -261,22 +261,29 @@ div
         section
           .section-label Start
           .frow.gutters
-            .col-xs-1-3
-              .stream-button(@click="startStream(true, false)")
+            .col-xs-1-4
+              .stream-button(@click="startStream(true, false, false)")
                 .frow.column-center
                   VideoSvg
                   | Video Only
                   .and-mic(:class="{'opacity-100': enableMic }")
                     | & Mic
-            .col-xs-1-3
-              .stream-button(@click="startStream(true, true)")
+            .col-xs-1-4
+              .stream-button(@click="startStream(true, true, false)")
                 .frow.column-center
                   VideoAndAudioSvg
                   | Video + Audio
                   .and-mic(:class="{'opacity-100': enableMic }")
                     | & Mic
-            .col-xs-1-3
-              .stream-button(@click="startStream(false, true)")
+            .col-xs-1-4
+              .stream-button(@click="startStream(true, true, true)")
+                .frow.column-center
+                  VideoAndAudioSvg
+                  | Video + Stereo Audio
+                  .and-mic(:class="{'opacity-100': enableMic }")
+                    | & Mic
+            .col-xs-1-4
+              .stream-button(@click="startStream(false, true, false)")
                 .frow.column-center
                   AudioSvg
                   | Audio Only
@@ -380,9 +387,10 @@ export default {
     // };
   },
   methods: {
-    startStream(enableVideo, enableAudio) {
+    startStream(enableVideo, enableAudio, forceStereo) {
       this.enableVideo = enableVideo;
       this.enableAudio = enableAudio;
+      this.forceStereo = forceStereo;
     
 
       if (this.$refs.connection.connection && this.$refs.connection.connection.attachStreams[0]) {
@@ -428,6 +436,7 @@ export default {
       this.stream = stream;
       this.stream.enableVideo = this.enableVideo;
       this.stream.enableAudio = this.enableAudio;
+      this.stream.forceStereo = this.forceStereo;
       this.$refs.connection.shareStreamUsingRTCMultiConnection(this.stream);
     },
     onSessionId(id) {
